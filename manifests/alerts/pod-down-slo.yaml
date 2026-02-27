@@ -1,0 +1,21 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: pod-slo-alerts
+  namespace: monitoring
+spec:
+  groups:
+  - name: pod-availability.rules
+    rules:
+    - alert: PodDown
+      expr: |
+        kube_pod_status_phase{
+          namespace="default",
+          phase="Running"
+        } == 0
+      for: 2m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Pod {{ $labels.pod }} is not running"
+        description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} has not been in Running state for more than 2 minutes."

@@ -1,0 +1,13 @@
+grafana:
+  adminPassword: "16112005"
+alertmanager:
+  config:
+    global:
+      resolve_timeout: 5m
+    route:
+      receiver: "slack"
+    receivers:
+      - name: "slack"
+        slack_configs:
+          - api_url: "YOUR_SLACK_WEBHOOK"
+            channel: "#alerts"    
